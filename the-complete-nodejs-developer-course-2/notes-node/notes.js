@@ -2,16 +2,16 @@ const addNote = (title, body) => {
   console.log('Add note', title, body);
 };
 
-const removeNote = (...args) => {
-  console.log('removeNote', ...args);
+const removeNote = (title) => {
+  console.log('removeNote', title);
 };
 
-const readNote = (...args) => {
-  console.log('readNote', ...args);
+const readNote = (title) => {
+  console.log('readNote', title);
 };
 
-const listNotes = (...args) => {
-  console.log('listNotes', ...args);
+const listNotes = () => {
+  console.log('listNotes');
 };
 
 module.exports = {
