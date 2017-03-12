@@ -1,10 +1,18 @@
 console.log('Starting app.js');
 
 const fs = require('fs');
-const os = require('os');
 const _ = require('lodash');
+
 const notes = require('./notes');
 
-console.log(_.isString(true));
-console.log(_.isString('vvscode'));
-console.log(_.uniq([1, 2, 1, 3, 2, 1, 4]));
+let [_nodePath, _filePath, command, ...args] = process.argv;
+
+if (command === 'add') {
+  console.log('Add new note', ...args);
+} else if (command === 'remove') {
+  console.log('Remove note', ...args);
+} else if (command === 'list') {
+  console.log('Show list', ...args);
+} else {
+  console.log('Enter correct command');
+}
