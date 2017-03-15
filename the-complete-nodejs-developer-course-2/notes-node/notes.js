@@ -1,13 +1,23 @@
 const fs = require('fs');
+const _ = require('lodash');
 
 const NOTES_FILE = 'notes.json';
 
 const addNote = (title, body) => {
   console.log('Add note', title, body);
   let notes = [];
-  let note = { title, body };
+  try {
+    let tmpNotes = fs.readFileSync(NOTES_FILE);
+    notes = JSON.parse(tmpNotes);
+  } catch (e) { }
+  
+  const sameNote = _.find(notes, { title });
+  if (sameNote) {
+    sameNote.body = body;
+  } else {
+    notes.push({ title, body });
+  }
 
-  notes.push(note);
   fs.writeFileSync(NOTES_FILE, JSON.stringify(notes));
 };
 
