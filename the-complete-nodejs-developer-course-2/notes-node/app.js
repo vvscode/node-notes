@@ -1,3 +1,4 @@
+// node app.js add --title "Some title" --body "Some body"
 console.log('Starting app.js');
 
 const fs = require('fs');
