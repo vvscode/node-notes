@@ -3,13 +3,17 @@ const _ = require('lodash');
 
 const NOTES_FILE = 'notes.json';
 
-const addNote = (title, body) => {
-  console.log('Add note', title, body);
-  let notes = [];
+const fetchNotes = () => {
   try {
     let tmpNotes = fs.readFileSync(NOTES_FILE);
-    notes = JSON.parse(tmpNotes);
-  } catch (e) { }
+    return JSON.parse(tmpNotes);
+  } catch (e) { return []; }
+};
+
+const saveNotes = (notes) => fs.writeFileSync(NOTES_FILE, JSON.stringify(notes));
+
+const addNote = (title, body) => {
+  let notes = fetchNotes();
   
   const sameNote = _.find(notes, { title });
   if (sameNote) {
@@ -17,21 +21,14 @@ const addNote = (title, body) => {
   } else {
     notes.push({ title, body });
   }
-
-  fs.writeFileSync(NOTES_FILE, JSON.stringify(notes));
+  saveNotes(notes);
 };
 
-const removeNote = (title) => {
-  console.log('removeNote', title);
-};
+const removeNote = (title) => saveNotes(fetchNotes().filter(item => item.title !== title));
 
-const readNote = (title) => {
-  console.log('readNote', title);
-};
+const readNote = (title) => fetchNotes().find(item => item.title === title);
 
-const listNotes = () => {
-  console.log('listNotes');
-};
+const listNotes = () => fetchNotes().map(({ title }) => title);
 
 module.exports = {
   addNote,

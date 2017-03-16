@@ -14,21 +14,20 @@ const {
   body
 } = argv;
 
-console.log('Yargs:', yargs.argv);
-
-
 if (command === 'add') {
   console.log('Add new note');
   notes.addNote(title, body);
+  console.log(notes.readNote(title));
 } else if (command === 'remove') {
   console.log('Remove note');
   notes.removeNote(title);
+  console.log(notes.listNotes().join('\n'));
 } else if (command === 'read') {
   console.log('Read note');
-  notes.readNote(title);
+  console.log(notes.readNote(title));
 } else if (command === 'list') {
   console.log('Show list');
-  notes.listNotes();
+  console.log(notes.listNotes().join('\n'));
 } else {
   console.log('Enter correct command');
 }
