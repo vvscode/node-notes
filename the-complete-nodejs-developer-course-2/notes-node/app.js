@@ -19,40 +19,47 @@ const bodyOptions = (desc = 'Body for note') => ({
   alias: 'b'
 });
 
-const argv = yargs
-  .command('add', 'Add a new note', {
-    title: titleOptions('Title of new note'),
-    body: bodyOptions('Body for new note')
-  })
-  .command('remove', 'Remove a note', {
-    title: titleOptions(),
-  })
-  .command('read', 'Read a note', {
-    title: titleOptions(),
-  })
-  .command('list', 'List notes', {})
+yargs
+  .command(
+    'add',
+    'Add a new note', {
+      title: titleOptions('Title of new note'),
+      body: bodyOptions('Body for new note')
+    },
+    ({
+      title,
+      body
+    }) => {
+      notes.addNote(title, body);
+      console.log(notes.readNote(title));
+    })
+  .command(
+    'remove',
+    'Remove a note', {
+      title: titleOptions(),
+    },
+    ({
+      title
+    }) => {
+      notes.removeNote(title);
+      console.log(notes.listNotes().join('\n'));
+    })
+  .command(
+    'read',
+    'Read a note', {
+      title: titleOptions(),
+    },
+    ({
+      title
+    }) => {
+      console.log(notes.readNote(title));
+    })
+  .command(
+    'list',
+    'List notes', {},
+    () => {
+      console.log(notes.listNotes().join('\n'));
+    }
+  )
   .help()
   .argv;
-const [command] = argv._;
-const {
-  title,
-  body
-} = argv;
-
-if (command === 'add') {
-  console.log('Add new note');
-  notes.addNote(title, body);
-  console.log(notes.readNote(title));
-} else if (command === 'remove') {
-  console.log('Remove note');
-  notes.removeNote(title);
-  console.log(notes.listNotes().join('\n'));
-} else if (command === 'read') {
-  console.log('Read note');
-  console.log(notes.readNote(title));
-} else if (command === 'list') {
-  console.log('Show list');
-  console.log(notes.listNotes().join('\n'));
-} else {
-  console.log('Enter correct command');
-}
