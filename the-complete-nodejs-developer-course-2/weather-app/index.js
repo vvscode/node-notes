@@ -9,4 +9,5 @@ request.get({
   json: true
 }, (err, response, body) => {
   console.log(`Address: ` , JSON.stringify(body.results[0].formatted_address, undefined, 2));
+  console.log(`Coordinates: ` , JSON.stringify(body.results[0].geometry.location.lat), JSON.stringify(body.results[0].geometry.location.lng));
 });
