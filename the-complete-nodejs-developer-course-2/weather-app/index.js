@@ -25,12 +25,20 @@ get({
     json: true
   })
   .then(({
-    body: {
-      results: [{
-        formatted_address,
-        geometry
-      }]
+    body
+  }) => {
+    // handle error from google api
+    if (body.status !== 'OK') {
+      throw Error('No matches found');
     }
+    return body;
+  })
+  .then(({
+    results: [{
+      formatted_address,
+      geometry
+    }],
+    status
   }) => {
     console.log(`Address: `, JSON.stringify(formatted_address, undefined, 2));
     console.log(`Coordinates: `, JSON.stringify(geometry.location.lat), JSON.stringify(geometry.location.lng));
