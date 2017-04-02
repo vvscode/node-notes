@@ -1,6 +1,9 @@
 const request = require('request');
 const util = require('util');
 const yargs = require('yargs');
+const promisify = require("es6-promisify");
+
+const get = promisify(request.get);
 
 const argv = yargs
   .options({
@@ -17,10 +20,14 @@ const argv = yargs
 const address = argv.a;
 const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}`;
 
-request.get({
-  url,
-  json: true
-}, (err, response, body) => {
-  console.log(`Address: `, JSON.stringify(body.results[0].formatted_address, undefined, 2));
-  console.log(`Coordinates: `, JSON.stringify(body.results[0].geometry.location.lat), JSON.stringify(body.results[0].geometry.location.lng));
-});
+get({
+    url,
+    json: true
+  })
+  .then(({
+    body
+  }) => {
+    console.log(`Address: `, JSON.stringify(body.results[0].formatted_address, undefined, 2));
+    console.log(`Coordinates: `, JSON.stringify(body.results[0].geometry.location.lat), JSON.stringify(body.results[0].geometry.location.lng));
+  })
+  .catch((err) => console.error('Some error: ', err));
