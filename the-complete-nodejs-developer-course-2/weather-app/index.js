@@ -1,6 +1,7 @@
 const util = require('util');
 const yargs = require('yargs');
 const getLocationInfo = require('./utils/location');
+const getForecast = require('./utils/forecast');
 
 const argv = yargs
   .options({
@@ -16,13 +17,15 @@ const argv = yargs
 
 const address = argv.a;
   getLocationInfo(address)
-  .then(({
+    .then(({
     results: [{
       formatted_address,
       geometry
     }]
-  }) => {
-    console.log(`Address: `, JSON.stringify(formatted_address, undefined, 2));
-    console.log(`Coordinates: `, JSON.stringify(geometry.location.lat), JSON.stringify(geometry.location.lng));
-  })
+    }) => {
+      console.log(formatted_address);  
+      console.log(geometry.location);  
+      return getForecast(geometry.location);
+    })
+  .then(({daily}) => console.log(daily.summary))
   .catch((err) => console.error('Some error: ', err));
