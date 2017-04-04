@@ -27,5 +27,5 @@ const address = argv.a;
       console.log(geometry.location);  
       return getForecast(geometry.location);
     })
-  .then(({daily}) => console.log(daily.summary))
+  .then(({body}) => console.log(require('util').inspect(body.daily.summary)))
   .catch((err) => console.error('Some error: ', err));

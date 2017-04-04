@@ -8,5 +8,8 @@ const get = promisify(request.get);
 module.exports = ({ lat, lng }) => {
   const url = `https://api.darksky.net/forecast/${FORECAST_API_KEY}/${lat},${lng}?lang=${FORECAST_LANG}`;
   // console.log(url);
-  return get(url);
+  return get({
+    url,
+    json: true
+  });
 };
