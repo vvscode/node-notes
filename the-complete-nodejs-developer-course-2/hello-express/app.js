@@ -18,5 +18,4 @@ app.get('/bad', (req, res) => res.status(500).send({
   errorMessage: 'Incorrect request handled by /bad'
 }));
 
-app.listen(HTTP_PORT);
-console.log(`Server started at :${HTTP_PORT}`);
+app.listen(HTTP_PORT, () => console.log(`Server started at :${HTTP_PORT}`));
