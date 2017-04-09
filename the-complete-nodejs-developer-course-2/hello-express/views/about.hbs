@@ -7,11 +7,11 @@
   <title>Help page</title>
 </head>
 <body>
-  <h1>{{text}}</h1>
+  <h1>{{screamIt text}}</h1>
   {{#if options.length}}
     <ul>
       {{#each options as |item|}}
-        <li>{{item}}</li>
+        <li>{{screamIt item}}</li>
       {{/each}}
     </ul>
   {{/if}}
