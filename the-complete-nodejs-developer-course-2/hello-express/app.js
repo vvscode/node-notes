@@ -10,6 +10,8 @@ app.set('view engine', 'hbs');
 
 app.use(express.static(`${__dirname}/public`));
 
+hbs.registerHelper('currentYear', () => new Date().getFullYear());
+
 app.get('/', (req, res) => {
   res.send('Hello from express.js');
 });
