@@ -1,4 +1,4 @@
-const HTTP_PORT = 3000;
+const HTTP_PORT = process.env.PORT || 3000;
 
 const express = require('express');
 const hbs = require('hbs');
