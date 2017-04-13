@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha $(find . -name '*-test.js')"
+    "test": "mocha $(find . -name '*-test.js')",
+    "watch-tests": "nodemon --exec 'npm test'"
   },
   "author": "",
   "license": "ISC",
