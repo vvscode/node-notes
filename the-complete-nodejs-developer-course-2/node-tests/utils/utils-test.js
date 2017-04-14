@@ -3,6 +3,7 @@ const {
   add,
   square,
   asyncAdd,
+  asyncSquare
 } = require('./utils');
 
 describe('Utils', function () {
@@ -28,7 +29,13 @@ describe('Utils', function () {
 
   describe('#asyncAdd()', function () {
     it('should call cb with sum of params', function (done) {
-      asyncAdd(1, 2, () => expect(add(1, 2)).toBe(1 + 2) && done());
+      asyncAdd(1, 2, (ret) => expect(ret).toBe(1 + 2) && done());
+    });
+  });
+
+    describe('#asyncSquare()', function () {
+    it('should call cb with square of param', function (done) {
+      asyncSquare(3, (ret) => expect(ret).toBe(3*3) && done());
     });
   });
 });
