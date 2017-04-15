@@ -11,3 +11,16 @@ describe('GET /', function () {
       .expect(200, done);
   });
 });
+
+describe('GET /user', function () {
+  it('respond with json', function(done) {
+    request(app)
+      .get('/user')
+      .expect('Content-Type', /json/)
+      .expect(200, {
+        user: 'me',
+        name: 'VvsCode',
+        params: [10, 20, 30]
+      }, done);
+  });
+});
