@@ -8,3 +8,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`0.0.0.0:${PORT}`));
+
+module.exports.app = app;
