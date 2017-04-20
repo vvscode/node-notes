@@ -14,8 +14,8 @@ const insertOne = (db, collectionName, data) => new Promise(
     .insertOne(data, (err, result) => err ? reject(err) : resolve(result))
 );
 
-const find = (db, collectionName) => db.collection(collectionName)
-    .find()
+const find = (db, collectionName, filter={}) => db.collection(collectionName)
+    .find(filter)
     .toArray();
 
 connect(`mongodb://localhost:27017/TodoApp`)
@@ -24,10 +24,12 @@ connect(`mongodb://localhost:27017/TodoApp`)
     console.log('Connected to MongoDB');
     return insertOne(db, 'Todos', {
       text: `Check DB insetion at ${new Date()}`,
-      done: false
+      done: true
     })
       .then((result) => console.log('Todo was inserted', JSON.stringify(result.ops, undefined, 2)))
-      .then(() => find(db, 'Todos'))
+      .then(() => find(db, 'Todos', {
+        done: true
+      }))
       .then((data) => console.log(JSON.stringify(data, undefined, 2)));
   })
   .catch(err => console.error(err))
