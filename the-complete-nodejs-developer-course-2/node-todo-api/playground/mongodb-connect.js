@@ -1,4 +1,4 @@
-const MongoClient = require('mongodb');
+const { MongoClient, ObjectID } = require('mongodb');
 
 let lastDbConnection;
 
@@ -28,7 +28,7 @@ connect(`mongodb://localhost:27017/TodoApp`)
     })
       .then((result) => console.log('Todo was inserted', JSON.stringify(result.ops, undefined, 2)))
       .then(() => find(db, 'Todos', {
-        done: true
+        _id: new ObjectID('58f916c651768944c5035b1a')
       }))
       .then((data) => console.log(JSON.stringify(data, undefined, 2)));
   })
