@@ -26,6 +26,7 @@ const deleteOne = (db, collectionName, filter = {}) => db.collection(collectionN
 /* Returns remove item, so we can return it back */
 const findOneAndDelete = (db, collectionName, filter = {}) => db.collection(collectionName).findOneAndDelete(filter);
 
+const findOneAndUpdateOne = (db, collectionName, filter, updateOperator) => db.collection(collectionName).findOneAndUpdate(filter, updateOperator);
 
 connect(`mongodb://localhost:27017/TodoApp`)
   .then((db) => {
@@ -50,6 +51,20 @@ connect(`mongodb://localhost:27017/TodoApp`)
       .then(() => find(db, 'Todos', {
         _id: new ObjectID('58f916c651768944c5035b1a')
       }).count())
+      .then(() => insertOne(db, 'Todos', {
+        text: `Check DB insetion at ${new Date()}`,
+        done: true,
+        customId: 3,
+      }))
+      .then(() => findOneAndUpdateOne(db, 'Todos', {
+        customId: 3
+      }, {
+        $set: {
+          done: false,
+          addSome: 'data'
+        }
+      }))
+      .then(() => find(db, 'Todos', { customId: 3 }).toArray())
       .then((data) => console.log(JSON.stringify(data, undefined, 2)));
   })
   .catch(err => console.error(err))
