@@ -11,7 +11,8 @@ let Todo = mongoose.model('Todo', {
   text: {
     type: String,
     required: true,
-    minlength: 1
+    minlength: 1,
+    trim: true,
   },
   completed: {
     type: Boolean,
@@ -23,9 +24,22 @@ let Todo = mongoose.model('Todo', {
   }
 });
 
+let User = mongoose.model('User', {
+  email: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true,
+    validate: {
+      validator: (value) => /\w@\w/.test(value),
+      message: '{VALUE} should be valid email',
+    },
+  }
+});
 
-(new Todo({
-  text: 'Another Todo from mongoose',
+
+(new User({
+  email: 'some@email',
   // completed: true,
   // completedAt: Date.now()
 })).save()
