@@ -1,6 +1,6 @@
 const { mongoose } = require('../db/mongoose');
 
-module.exports = mongoose.model('User', {
+const User = mongoose.model('User', {
   email: {
     type: String,
     required: true,
@@ -12,3 +12,5 @@ module.exports = mongoose.model('User', {
     },
   }
 });
+
+module.exports = { User };

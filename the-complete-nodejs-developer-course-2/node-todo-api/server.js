@@ -1,6 +1,6 @@
 const { mongoose } = require('./db/mongoose');
-const User = require('./models/user');
-const Todo = require('./models/todo');
+const { User } = require('./models/user');
+const { Todo } = require('./models/todo');
 
 (new User({
   email: 'some@email',
