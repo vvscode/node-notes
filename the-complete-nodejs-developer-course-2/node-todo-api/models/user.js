@@ -1,6 +1,6 @@
 const { mongoose } = require('../db/mongoose');
 
-const User = mongoose.model('User', {
+let User = mongoose.model('User', {
   email: {
     type: String,
     required: true,
