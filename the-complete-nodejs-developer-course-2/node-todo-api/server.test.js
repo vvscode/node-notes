@@ -38,5 +38,26 @@ describe('/todos', () => {
             .catch((err) => done(err));
         });
     });
+
+    it('should not create todo with invalid body data', (done) => {
+      let text = '';
+
+      request(app)
+        .post('/todos')
+        .send({
+          text
+        })
+        .expect(400)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+
+          Todo.find()
+            .then((todos) => expect(todos.length).toBe(0))
+            .then(() => done())
+            .catch((err) => done(err));
+        });
+    })
   });
 });
