@@ -1,4 +1,5 @@
 const { mongoose } = require('../db/mongoose');
+const { ObjectID } = require('mongodb');
 
 let Todo = mongoose.model('Todo', {
   text: {
@@ -17,4 +18,13 @@ let Todo = mongoose.model('Todo', {
   }
 });
 
-module.exports = { Todo };
+let validateTodoId = (x) => {
+  if (ObjectID.isValid(x)) {
+    return Promise.resolve(x);
+  }
+  return Promise.reject({
+    message: 'Incorrect Id'
+  });
+}
+
+module.exports = { Todo, validateTodoId };
