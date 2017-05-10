@@ -104,7 +104,7 @@ describe('/todos', () => {
 
     it('should return 404 for unknown id', (done) => {
       request(app)
-        .get(`/todos/${`${_id}`.replace(/\w/g, '0')}`)
+        .get(`/todos/${_id.toHexString().replace(/\w/g, '0')}`)
         .expect(404)
         .end((err) => done(err))
     });
