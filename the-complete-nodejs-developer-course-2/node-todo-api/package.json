@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./*.test.js",
     "test-watch": "nodemon --exec 'npm test'",
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "heroku builds:create -a node-express-todo-api --version 'add mongo addon'"
   },
   "engines": {
     "node": "6.9.3"
