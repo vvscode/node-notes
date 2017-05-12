@@ -59,6 +59,16 @@ app.get('/todos/:todoId', (req, res) => {
     });
 });
 
+app.delete('/todos/:todoId', (req, res) => {
+  let todoId = req.params.todoId;
+  let validatePromise = validateTodoId(todoId);
+
+  validatePromise
+    .then(() => Todo.findByIdAndRemove(todoId))
+    .then((todo) => todo ? res.status(200).send(todo) : res.status(404).send({}))
+    .catch((err) => res.status(400).send(err));
+});
+
 app.listen(PORT, () => console.log(`Server started at http://127.0.0.1:${PORT}`));
 
 module.exports = {
