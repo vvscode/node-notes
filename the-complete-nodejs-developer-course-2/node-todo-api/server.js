@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 
 const {
   mongoose
@@ -55,7 +56,9 @@ app.get('/todos/:todoId', (req, res) => {
     }))
     .catch((e) => {
       console.log(e);
-      res.status(400).send({ error: e.message || 'Something went wrong' });
+      res.status(400).send({
+        error: e.message || 'Something went wrong'
+      });
     });
 });
 
@@ -65,6 +68,30 @@ app.delete('/todos/:todoId', (req, res) => {
 
   validatePromise
     .then(() => Todo.findByIdAndRemove(todoId))
+    .then((todo) => todo ? res.status(200).send(todo) : res.status(404).send({}))
+    .catch((err) => res.status(400).send(err));
+});
+
+app.patch('/todos/:todoId', (req, res) => {
+  let todoId = req.params.todoId;
+  let body = _.pick(req.body, ['text', 'completed']);
+  let validatePromise = validateTodoId(todoId);
+
+  console.log(body);
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+
+  validatePromise
+    .then(() => Todo.findByIdAndUpdate(todoId, {
+      $set: body
+    }, {
+      new: true
+    }))
     .then((todo) => todo ? res.status(200).send(todo) : res.status(404).send({}))
     .catch((err) => res.status(400).send(err));
 });
