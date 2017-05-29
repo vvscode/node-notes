@@ -115,7 +115,7 @@ describe('/todos', () => {
     });
 
 
-    it('should return 400 for invalid is', (done) => {
+    it('should return 400 for invalid ids', (done) => {
       request(app)
         .get(`/todos/1234`)
         .expect(400)
@@ -167,6 +167,82 @@ describe('/todos', () => {
       request(app)
         .delete(`/todos/1234`)
         .expect(400)
+        .end((err) => done(err))
+    });
+  });
+
+  describe('PATCH :id', () => {
+    let _id1 = new ObjectID();
+    let _id2 = new ObjectID();
+    const todos = [{
+        _id: _id1,
+        text: 'First text todo',
+        completed: true,
+        completedAt: 10,
+      },
+      {
+        _id: _id2,
+        text: 'Second text todo'
+      },
+    ];
+    beforeEach((done) => {
+      Todo.remove({}).then(() => Todo.insertMany(todos)).then(() => done());
+    });
+
+    it('should return 404 for unknown id', (done) => {
+      request(app)
+        .patch(`/todos/${_id1.toHexString().replace(/\w/g, '0')}`)
+        .send({
+          text: 'new text'
+        })
+        .expect(404)
+        .end((err) => done(err))
+    });
+
+
+    it('should return 400 for invalid ids', (done) => {
+      request(app)
+        .patch(`/todos/1234`)
+        .send({
+          text: 'new text'
+        })
+        .expect(400)
+        .end((err) => done(err))
+    });
+
+
+    it('should setup completedAt into null on completed:false', (done) => {
+      request(app)
+        .patch(`/todos/${_id1.toHexString()}`)
+        .send({
+          text: 'new text',
+          completed: false
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.text).toEqual('new text');
+          expect(res.body._id).toEqual(_id1);
+          expect(res.body.completed).toEqual(false);
+          expect(res.body.completedAt).toEqual(null);
+        })
+        .end((err) => done(err))
+    });
+
+    it('should setup completedAt into non null on completed:true', (done) => {
+      let now = Date.now();
+      request(app)
+        .patch(`/todos/${_id2.toHexString()}`)
+        .send({
+          text: 'new text',
+          completed: true
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.text).toEqual('new text');
+          expect(res.body._id).toEqual(_id2);
+          expect(res.body.completed).toEqual(true);
+          expect(res.body.completedAt).toBeGreaterThan(now);
+        })
         .end((err) => done(err))
     });
   });
