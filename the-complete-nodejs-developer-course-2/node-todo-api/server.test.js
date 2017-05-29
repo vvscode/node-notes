@@ -241,6 +241,7 @@ describe('/todos', () => {
           expect(res.body.text).toEqual('new text');
           expect(res.body._id).toEqual(_id2);
           expect(res.body.completed).toEqual(true);
+          expect(res.body.completedAt).toBeA('number');
           expect(res.body.completedAt).toBeGreaterThan(now);
         })
         .end((err) => done(err))
