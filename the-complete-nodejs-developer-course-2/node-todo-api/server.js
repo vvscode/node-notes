@@ -106,6 +106,15 @@ app.patch('/todos/:todoId', (req, res) => {
     .catch((err) => res.status(400).send(err));
 });
 
+app.post('/user', (req, res) => {
+  let body = _.pick(req.body, ['email', 'password']);
+
+  let user = new User(body);
+  user.save()
+    .then((user) => res.send(user))
+    .catch((err) => res.status(400).send(err));
+});
+
 app.listen(PORT, () => console.log(`Server started at http://127.0.0.1:${PORT}`));
 
 module.exports = {
