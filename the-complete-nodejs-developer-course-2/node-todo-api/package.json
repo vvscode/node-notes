@@ -7,6 +7,7 @@
     "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha ./*.test.js",
     "test-watch": "nodemon --exec 'npm test'",
     "start": "node server.js",
+    "start-db": "mongod --dbpath ~/mongo-data",
     "deploy": "heroku builds:create -a node-express-todo-api --version 'add mongo addon'"
   },
   "engines": {
@@ -17,6 +18,7 @@
   "dependencies": {
     "body-parser": "1.17.1",
     "express": "4.15.2",
+    "jsonwebtoken": "7.4.1",
     "lodash": "4.17.4",
     "mongodb": "2.2.5",
     "mongoose": "4.9.6",
