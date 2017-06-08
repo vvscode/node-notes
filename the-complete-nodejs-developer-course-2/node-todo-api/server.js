@@ -116,6 +116,19 @@ app.post('/user', (req, res) => {
     .catch((err) => res.status(400).send(err));
 });
 
+app.get('/users/me', (req, res) => {
+  let token = req.header('x-auth');
+  console.log('/users/me');
+
+  User.findByToken(token).then((user) => {
+    console.log('findByToken', user);
+    if (!user) {
+      return Promise.reject();
+    }
+    res.send(user);
+  }).catch(() => res.status(401).send());
+});
+
 app.listen(PORT, () => console.log(`Server started at http://127.0.0.1:${PORT}`));
 
 module.exports = {
