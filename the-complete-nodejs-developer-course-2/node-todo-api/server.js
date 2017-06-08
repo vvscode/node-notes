@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 const env = process.env.NODE_ENV || 'development';
+const {
+  authenticate
+} = require('./middlewares/authenticate');
 
 if (env === 'development') {
   process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
@@ -116,18 +119,7 @@ app.post('/user', (req, res) => {
     .catch((err) => res.status(400).send(err));
 });
 
-app.get('/users/me', (req, res) => {
-  let token = req.header('x-auth');
-  console.log('/users/me');
-
-  User.findByToken(token).then((user) => {
-    console.log('findByToken', user);
-    if (!user) {
-      return Promise.reject();
-    }
-    res.send(user);
-  }).catch(() => res.status(401).send());
-});
+app.get('/users/me', authenticate, (req, res) => res.send(req.user));
 
 app.listen(PORT, () => console.log(`Server started at http://127.0.0.1:${PORT}`));
 
