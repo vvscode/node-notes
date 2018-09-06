@@ -25,19 +25,25 @@ const server = http.createServer((req, res) => {
   // get http method
   const method = req.method.toLowerCase();
 
-  // send the response
-  res.end(
-    `Hello world> ${method}:${trimedPath} (${JSON.stringify(
-      queryStringObject,
-    )})`,
+  // get the headers as an object
+  const headers = req.headers;
+
+  const requestInfo = JSON.stringify(
+    {
+      method,
+      path: trimedPath,
+      query: queryStringObject,
+      headers,
+    },
+    null,
+    2,
   );
 
+  // send the response
+  res.end(`Hello world> ${requestInfo}`);
+
   //  log url to console
-  console.log(
-    `Request recieved on path> ${method}:${trimedPath}  (${JSON.stringify(
-      queryStringObject,
-    )})`,
-  );
+  console.log(`Request recieved on path> ${requestInfo})`);
 });
 
 // Start server and listen on port
