@@ -19,11 +19,14 @@ const server = http.createServer((req, res) => {
   const path = parsedUrl.pathname;
   const trimedPath = path.replace(/^\/+|\/+$/g, '');
 
+  // get http method
+  const method = req.method.toLowerCase();
+
   // send the response
-  res.end(`Hello world: ${path} (${trimedPath})`);
+  res.end(`Hello world> ${method}:${trimedPath}`);
 
   //  log url to console
-  console.log(`Request recieved on path: ${trimedPath}`);
+  console.log(`Request recieved on path> ${method}:${trimedPath}`);
 });
 
 // Start server and listen on port
