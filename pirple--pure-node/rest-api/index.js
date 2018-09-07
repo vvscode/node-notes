@@ -89,10 +89,9 @@ server.listen(config.port, () =>
 );
 
 handlers = {};
-handlers.sample = (data, cb) => {
-  // callback http status code and payload (object)
+// callback http status code and payload (object)
+handlers.sample = (data, cb) =>
   cb(406, { name: `sample handler for ${JSON.stringify(data, null, 2)}` });
-};
 
 handlers.notFound = (data, cb) =>
   cb(404, {
@@ -100,7 +99,10 @@ handlers.notFound = (data, cb) =>
     data,
   });
 
+handlers.ping = (data, cb) => cb(200);
+
 // Define request router
 router = {
   sample: handlers.sample,
+  ping: handlers.ping,
 };
