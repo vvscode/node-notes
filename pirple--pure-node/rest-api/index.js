@@ -54,10 +54,8 @@ const server = http.createServer((req, res) => {
       trimedPath in router ? router[trimedPath] : handlers.notFound;
 
     handler(requestInfo, (status, payload) => {
-      res.writeHead(
-        status || DEFAULT_STATUS_CODE,
-        'Content-Type: application/json',
-      );
+      res.statusCode = status || DEFAULT_STATUS_CODE;
+      res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(payload || {}));
 
       //  log url to console
