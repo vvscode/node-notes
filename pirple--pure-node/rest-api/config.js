@@ -5,11 +5,13 @@
 const DEFAULT_ENV = 'staging';
 
 const staging = {
+  https: false,
   port: 3000,
   envName: 'staging',
 };
 
 const production = {
+  https: true,
   port: 5000,
   envName: 'production',
 };

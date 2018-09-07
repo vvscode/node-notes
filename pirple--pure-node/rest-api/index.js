@@ -4,18 +4,27 @@
 
 // Dependencies
 const http = require('http');
+const https = require('https');
 const url = require('url');
+const fs = require('fs');
 const StringDecoder = require('string_decoder').StringDecoder;
 
 // Configuration
 const config = require('./config');
+
+const createServer = config.https
+  ? https.createServer.bind(https, {
+      key: fs.readFileSync('./https/key.pem'),
+      cert: fs.readFileSync('./https/cert.pem'),
+    })
+  : http.createServer.bind(http);
 
 const DEFAULT_STATUS_CODE = 200;
 
 let router, handlers;
 
 // The server should respons to all requests with a string
-const server = http.createServer((req, res) => {
+const server = createServer((req, res) => {
   // Get the url and parse it
   // https://developer.mozilla.org/en-US/docs/Web/API/URL
   const parsedUrl = url.parse(req.url, true);
@@ -72,7 +81,11 @@ const server = http.createServer((req, res) => {
 
 // Start server and listen on port
 server.listen(config.port, () =>
-  console.log(`Server started: http://localhost:${config.port}`),
+  console.log(
+    `Server started: ${config.https ? 'https' : 'http'}://localhost:${
+      config.port
+    }`,
+  ),
 );
 
 handlers = {};
