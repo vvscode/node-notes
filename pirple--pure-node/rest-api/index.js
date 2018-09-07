@@ -8,6 +8,9 @@ const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 
 const PORT = 3000;
+const DEFAULT_STATUS_CODE = 200;
+
+let router, handlers;
 
 // The server should respons to all requests with a string
 const server = http.createServer((req, res) => {
@@ -37,20 +40,23 @@ const server = http.createServer((req, res) => {
     buffer += decoder.end();
 
     // common request information
-    const requestInfo = JSON.stringify(
-      {
-        method,
-        path: trimedPath,
-        query: queryStringObject,
-        headers,
-        payload: buffer,
-      },
-      null,
-      2,
-    );
+    const requestInfo = {
+      method,
+      path: trimedPath,
+      query: queryStringObject,
+      headers,
+      payload: buffer,
+    };
 
-    // send the response
-    res.end(`Hello world> ${requestInfo}`);
+    // choose the handler for request
+    // if one is not found - use notFounc hanlder
+    const handler =
+      trimedPath in router ? router[trimedPath] : handlers.notFound;
+
+    handler(requestInfo, (status, payload) => {
+      res.statusCode = status || DEFAULT_STATUS_CODE;
+      res.end(JSON.stringify(payload || {}));
+    });
 
     //  log url to console
     console.log(`Request recieved on path> ${requestInfo})`);
@@ -61,3 +67,20 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () =>
   console.log(`Server started: http://localhost:${PORT}`),
 );
+
+handlers = {};
+handlers.sample = (data, cb) => {
+  // callback http status code and payload (object)
+  cb(406, { name: `sample handler for ${JSON.stringify(data, null, 2)}` });
+};
+
+handlers.notFound = (data, cb) =>
+  cb(404, {
+    error: 'no handler for data',
+    data,
+  });
+
+// Define request router
+router = {
+  sample: handlers.sample,
+};
