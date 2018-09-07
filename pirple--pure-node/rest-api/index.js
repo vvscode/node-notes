@@ -10,7 +10,6 @@ const StringDecoder = require('string_decoder').StringDecoder;
 // Configuration
 const config = require('./config');
 
-const PORT = config.port;
 const DEFAULT_STATUS_CODE = 200;
 
 let router, handlers;
@@ -72,8 +71,8 @@ const server = http.createServer((req, res) => {
 });
 
 // Start server and listen on port
-server.listen(PORT, () =>
-  console.log(`Server started: http://localhost:${PORT}`),
+server.listen(config.port, () =>
+  console.log(`Server started: http://localhost:${config.port}`),
 );
 
 handlers = {};
