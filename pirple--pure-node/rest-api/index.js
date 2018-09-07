@@ -7,7 +7,10 @@ const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 
-const PORT = 3000;
+// Configuration
+const config = require('./config');
+
+const PORT = config.port;
 const DEFAULT_STATUS_CODE = 200;
 
 let router, handlers;
