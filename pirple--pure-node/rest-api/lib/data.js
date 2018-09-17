@@ -10,6 +10,7 @@ const lib = {};
 
 // Base directory path
 lib.baseDir = path.join(__dirname, '/../.data');
+const getFullName = (dir, fileName) => `${lib.baseDir}/${dir}/${fileName}.json`;
 
 /**
  * Create new file
@@ -19,27 +20,21 @@ lib.baseDir = path.join(__dirname, '/../.data');
  * @param {*} cb
  */
 lib.create = (dir, fileName, data, cb) => {
-  const fullFileName = `${lib.baseDir}/${dir}/${fileName}.json`;
   // open for writing
+  const fullFileName = getFullName(dir, fileName);
+
   fs.open(fullFileName, 'wx', (err, fp) => {
-    if (!err && fp) {
-      const stringData = JSON.stringify(data, null, 2);
-      fs.writeFile(fp, stringData, err => {
-        if (!err) {
-          fs.close(fp, err => {
-            if (!err) {
-              cb(false);
-            } else {
-              cb('Can not close file');
-            }
-          });
-        } else {
-          cb(`Error writing to file ${fullFileName}`);
-        }
-      });
-    } else {
-      cb(`Could not create file ${fullFileName}`);
+    if (err || !fp) {
+      cb(`Error opening to file ${fullFileName}`);
     }
+    const stringData = JSON.stringify(data, null, 2);
+    fs.writeFile(fp, stringData, err => {
+      if (err) {
+      }
+      fs.close(fp, err => {
+        err ? cb(`Error closing to file ${fullFileName}`) : cb(false);
+      });
+    });
   });
 };
 
@@ -49,46 +44,40 @@ lib.create = (dir, fileName, data, cb) => {
  * @param {*} fileName
  * @param {*} cb
  */
-lib.read = (dir, fileName, cb) => {
-  const fullFileName = `${lib.baseDir}/${dir}/${fileName}.json`;
-  fs.readFile(fullFileName, cb);
-};
+lib.read = (dir, fileName, cb) => fs.readFile(getFullName(dir, fileName), cb);
 
 lib.update = (dir, fileName, data, cb) => {
-  const fullFileName = `${lib.baseDir}/${dir}/${fileName}.json`;
   // open for writing
+  const fullFileName = getFullName(dir, fileName);
   fs.open(fullFileName, 'r+', (err, fp) => {
-    if (!err && fp) {
-      const stringData = JSON.stringify(data, null, 2);
+    if (err || !fp) {
+      return cb(`Could not open file ${fullFileName}`);
+    }
 
-      fs.ftruncate(fp, err => {
+    const stringData = JSON.stringify(data, null, 2);
+    fs.ftruncate(fp, err => {
+      if (err) {
+        return cb('Can not truncate file');
+      }
+      fs.writeFile(fp, stringData, err => {
         if (err) {
-          return cb('Can not truncate file');
+          return cb(`Error writing to file ${fullFileName}`);
         }
-        fs.writeFile(fp, stringData, err => {
-          if (!err) {
-            fs.close(fp, err => {
-              if (!err) {
-                cb(false);
-              } else {
-                cb('Can not close file');
-              }
-            });
-          } else {
-            cb(`Error writing to file ${fullFileName}`);
-          }
+        fs.close(fp, err => {
+          err ? cb(`Error closing to file ${fullFileName}`) : cb(false);
         });
       });
-    } else {
-      cb(`Could not open file ${fullFileName}`);
-    }
+    });
   });
 };
 
-lib.delete = (dir, fileName, cb) => {
-  const fullFileName = `${lib.baseDir}/${dir}/${fileName}.json`;
-  fs.unlink(fullFileName, cb);
-};
+/**
+ * Delete existing file
+ * @param {*} dir
+ * @param {*} fileName
+ * @param {*} cb
+ */
+lib.delete = (dir, fileName, cb) => fs.unlink(getFullName(dir, fileName), cb);
 
 // Export module
 module.exports = lib;
