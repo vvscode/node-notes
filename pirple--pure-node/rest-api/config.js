@@ -8,12 +8,14 @@ const staging = {
   https: false,
   port: 3000,
   envName: 'staging',
+  hashingSecret: 'SecretKey',
 };
 
 const production = {
   https: true,
   port: 5000,
   envName: 'production',
+  hashingSecret: 'AnotherSecrectKey',
 };
 
 const env = {

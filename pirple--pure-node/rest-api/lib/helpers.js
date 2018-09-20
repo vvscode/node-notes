@@ -1,3 +1,6 @@
+const crypto = require('crypto');
+var config = require('../config');
+
 const helpers = {};
 
 /**
@@ -11,6 +14,18 @@ helpers.parseJson = str => {
     object = false;
   }
   return object;
+};
+
+helpers.hash = str => {
+  if (typeof str == 'string' && str.length > 0) {
+    const hash = crypto
+      .createHmac('sha256', config.hashingSecret)
+      .update(str)
+      .digest('hex');
+    return hash;
+  } else {
+    return false;
+  }
 };
 
 module.exports = helpers;
