@@ -9,6 +9,8 @@ const url = require('url');
 const fs = require('fs');
 const StringDecoder = require('string_decoder').StringDecoder;
 
+const router = require('./lib/handlers');
+
 // Configuration
 const config = require('./config');
 
@@ -20,8 +22,6 @@ const createServer = config.https
   : http.createServer.bind(http);
 
 const DEFAULT_STATUS_CODE = 200;
-
-let router, handlers;
 
 // The server should respons to all requests with a string
 const server = createServer((req, res) => {
@@ -61,8 +61,7 @@ const server = createServer((req, res) => {
 
     // choose the handler for request
     // if one is not found - use notFounc hanlder
-    const handler =
-      trimedPath in router ? router[trimedPath] : handlers.notFound;
+    const handler = trimedPath in router ? router[trimedPath] : router.notFound;
 
     handler(requestInfo, (status, payload) => {
       res.statusCode = status || DEFAULT_STATUS_CODE;
@@ -87,22 +86,3 @@ server.listen(config.port, () =>
     }`,
   ),
 );
-
-handlers = {};
-// callback http status code and payload (object)
-handlers.sample = (data, cb) =>
-  cb(406, { name: `sample handler for ${JSON.stringify(data, null, 2)}` });
-
-handlers.notFound = (data, cb) =>
-  cb(404, {
-    error: 'no handler for data',
-    data,
-  });
-
-handlers.ping = (data, cb) => cb(200);
-
-// Define request router
-router = {
-  sample: handlers.sample,
-  ping: handlers.ping,
-};
