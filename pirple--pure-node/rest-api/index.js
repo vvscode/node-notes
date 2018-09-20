@@ -10,6 +10,7 @@ const fs = require('fs');
 const StringDecoder = require('string_decoder').StringDecoder;
 
 const router = require('./lib/handlers');
+const _helpers = require('./lib/helpers');
 
 // Configuration
 const config = require('./config');
@@ -56,7 +57,7 @@ const server = createServer((req, res) => {
       path: trimedPath,
       query: queryStringObject,
       headers,
-      payload: buffer,
+      payload: _helpers.parseJson(buffer),
     };
 
     // choose the handler for request
