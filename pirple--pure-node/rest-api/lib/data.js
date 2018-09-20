@@ -4,6 +4,7 @@
 // Deps
 const fs = require('fs');
 const path = require('path');
+const helpers = require('./helpers');
 
 // Container of the module
 const lib = {};
@@ -44,7 +45,13 @@ lib.create = (dir, fileName, data, cb) => {
  * @param {*} fileName
  * @param {*} cb
  */
-lib.read = (dir, fileName, cb) => fs.readFile(getFullName(dir, fileName), cb);
+lib.read = (dir, fileName, cb) =>
+  fs.readFile(getFullName(dir, fileName), (err, data) => {
+    if (err) {
+      return cb(err);
+    }
+    return cb(helpers.parseJson(data));
+  });
 
 lib.update = (dir, fileName, data, cb) => {
   // open for writing
