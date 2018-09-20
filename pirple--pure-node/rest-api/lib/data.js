@@ -26,7 +26,7 @@ lib.create = (dir, fileName, data, cb) => {
 
   fs.open(fullFileName, 'wx', (err, fp) => {
     if (err || !fp) {
-      cb(`Error opening to file ${fullFileName}`);
+      return cb(`Error opening to file ${fullFileName}`);
     }
     const stringData = JSON.stringify(data, null, 2);
     fs.writeFile(fp, stringData, err => {
