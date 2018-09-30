@@ -1,4 +1,5 @@
 const _data = require('../data');
+const helpers = require('../helpers');
 
 // Tokens - post
 // Required data: phone, password
@@ -45,7 +46,10 @@ const tokenPost = (data, callback) => {
           });
         }
       } else {
-        callback(400, { Error: 'Could not find the specified user.' });
+        callback(400, {
+          Error: 'Could not find the specified user.',
+          phone,
+        });
       }
     });
   } else {
