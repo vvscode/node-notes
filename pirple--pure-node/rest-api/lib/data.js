@@ -50,7 +50,7 @@ lib.read = (dir, fileName, cb) =>
     if (err) {
       return cb(err);
     }
-    return cb(helpers.parseJson(data));
+    return cb(null, helpers.parseJson(data));
   });
 
 lib.update = (dir, fileName, data, cb) => {
