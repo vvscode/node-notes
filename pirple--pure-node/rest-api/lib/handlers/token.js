@@ -61,11 +61,11 @@ const tokenPost = (data, callback) => {
 // Required data: id
 // Optional data: none
 const tokenGet = (data, callback) => {
+  console.log(data);
   // Check that id is valid
   let id =
-    typeof data.queryStringObject.id == 'string' &&
-    data.queryStringObject.id.trim().length == 20
-      ? data.queryStringObject.id.trim()
+    typeof data.query.id == 'string' && data.query.id.trim().length == 20
+      ? data.query.id.trim()
       : false;
   if (id) {
     // Lookup the token
@@ -133,9 +133,8 @@ const tokenPut = (data, callback) => {
 const tokenDelete = (data, callback) => {
   // Check that id is valid
   let id =
-    typeof data.queryStringObject.id == 'string' &&
-    data.queryStringObject.id.trim().length == 20
-      ? data.queryStringObject.id.trim()
+    typeof data.query.id == 'string' && data.query.id.trim().length == 20
+      ? data.query.id.trim()
       : false;
   if (id) {
     // Lookup the token
