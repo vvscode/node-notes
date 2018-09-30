@@ -3,4 +3,5 @@ module.exports = {
   sample: require('./sample'),
   notFound: require('./notFound'),
   user: require('./user'),
+  token: require('./token'),
 };
